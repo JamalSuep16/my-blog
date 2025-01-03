@@ -1,26 +1,26 @@
-export default function Categories() {
+import { getAllCategories, getPostsByCategory } from "@/utils/contentful-data";
+import Image from "next/image";
+import Link from "next/link";
+
+export default async function CategoryPage() {
+  const posts = await getAllCategories();
   return (
-    <section className="w-full h-full bg-slate-900">
-      <div className="grid box-content w-full h-20">
-        <div className="mt-20 m-16 bg-slate-600">
-          <h2>CAR MODIFICATION</h2>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Molestiae
-            libero dolorem quod quaerat ab quasi iste odio repudiandae,
-            recusandae, similique quibusdam ducimus numquam quas, veniam
-            sapiente fuga ratione esse tempora.
-          </p>
+    <>
+      <section>
+        <div className="p-10 gap-5">
+          {posts?.map((item) => {
+            return (
+              <article key={item.slug} className="">
+                <div>
+                  <h2>{item.title}</h2>
+                  <p>{item.description}</p>
+                </div>
+                <Link href={`/categories/${item.slug}`}>Read More</Link>
+              </article>
+            );
+          })}
         </div>
-        <div className="mt-10 m-10 bg-slate-600">
-          <h2>DRIVING TIPS</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Provident
-            voluptatibus nisi aperiam, officia minima consequatur culpa nemo
-            magni blanditiis iste totam quas quae harum quod earum, incidunt
-            ratione dolorum enim?
-          </p>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

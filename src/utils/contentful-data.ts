@@ -75,7 +75,43 @@ export async function getPostsByTitle(keywoard: string) {
   }
 }
 
-export async function getPostsByCategory() {}
+export async function getPostsByCategory({
+  content_type,
+  fields_popular,
+}: {
+  content_type: string;
+  fields_popular?: boolean;
+}) {
+  try {
+    const res = await client.getEntries({
+      content_type: content_type,
+      "fields.popular": fields_popular,
+    });
+    console.log(res.items);
+    return res;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
+export async function getAllCategories() {
+  try {
+    const data = await client.getEntries({ content_type: "blogCategory" });
+
+    console.log(data.items);
+
+    return data.items.map((post) => {
+      return {
+        title: post.fields.title,
+        description: post.fields.description,
+      };
+    });
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
 // client.getEntries()
 // .then((response) => console.log(response.items))
