@@ -124,7 +124,11 @@ export async function getLatestPosts() {
       limit: 1,
     });
 
-    return res;
+    return res.items.map((post) => {
+      return {
+        blogCategory: post.fields.blogCategory,
+      };
+    });
   } catch (error) {
     console.error(error);
     return null;

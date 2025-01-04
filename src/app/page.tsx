@@ -1,4 +1,5 @@
 import {
+  // getAllCategories,
   // getAllEntries,
   // getAllBlogPost,
   // getAllHeroSection,
@@ -63,7 +64,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div className="relative h-[300px] w-full object-cover">
             <Image
-              src={`https:${latestPosts?.items[0].fields.thumbnailImage.fields.file.url}`}
+              src={`https:${latestPosts?.items?.[0]?.fields?.thumbnailImage?.fields?.file?.url}`}
               alt="Latest post image"
               fill
             />
@@ -73,6 +74,7 @@ export default async function HomePage() {
               {latestPosts.items[0].fields.title}
             </h2>
             <p>{latestPosts?.items[0].fields.preview}</p>
+            <p>{latestPosts?.items[0].fields.blogCategory}</p>
             <Link
               href={`/blog/${latestPosts.items[0].fields.slug}`}
               className="flex items-center font-medium text-white absolute rounded-xl hover:bg-slate-600"
@@ -90,6 +92,7 @@ export default async function HomePage() {
             alt="Blog Category Image"
             width={100}
             height={100}
+            className="object-cover rounded-xl"
           />
         </div>
         <div>

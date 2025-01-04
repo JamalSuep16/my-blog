@@ -22,7 +22,7 @@ export default async function BlogPage() {
                     className=" object-cover rounded-xl"
                   />
                 </div>
-                <h2 className="text-black font-bold">{item.title}</h2>
+                <h2 className="text-white font-bold">{item.title}</h2>
                 <p>{item.preview}</p>
                 <Link
                   href={`/blog/${item.slug}`}
