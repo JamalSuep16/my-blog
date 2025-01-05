@@ -27,7 +27,6 @@ export default async function HomePage() {
     content_type: "blogCategory",
     fields_popular: true,
   });
-  console.log(Categories);
 
   return (
     <>
@@ -64,7 +63,7 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
           <div className="relative h-[300px] w-full object-cover">
             <Image
-              src={`https:${latestPosts?.items?.[0]?.fields?.thumbnailImage?.fields?.file?.url}`}
+              src={`https:${latestPosts.items[0].fields.thumbnailImage.fields.file.url}`}
               alt="Latest post image"
               fill
             />
@@ -73,8 +72,14 @@ export default async function HomePage() {
             <h2 className="overflow-hidden rounded-lg border border-gray-200 shadow-lg">
               {latestPosts.items[0].fields.title}
             </h2>
-            <p>{latestPosts?.items[0].fields.preview}</p>
-            <p>{latestPosts?.items[0].fields.blogCategory}</p>
+            <p>{latestPosts.items[0].fields.preview}</p>
+            <div className="rounded-full px-4 py-2 text-sm bg-slate-400">
+              {latestPosts.items[0].fields.blogCategory.map(
+                (category, index) => (
+                  <p key={index}>{category.fields.title}</p>
+                )
+              )}
+            </div>
             <Link
               href={`/blog/${latestPosts.items[0].fields.slug}`}
               className="flex items-center font-medium text-white absolute rounded-xl hover:bg-slate-600"
@@ -86,19 +91,23 @@ export default async function HomePage() {
       </section>
       <section className="p-10">
         <h2 className="mb-5 text-2xl font-bold">POPULAR CATEGORY</h2>
-        <div>
-          <Image
-            src={`https:${postByCategory?.items[0].fields.image.fields.file.url}`}
-            alt="Blog Category Image"
-            width={100}
-            height={100}
-            className="object-cover rounded-xl"
-          />
-        </div>
-        <div>
-          <h2>{postByCategory?.items[0].fields.title}</h2>
-          <p>{postByCategory?.items[0].fields.preview}</p>
-        </div>
+        {postByCategory?.items.map((post, index) => (
+          <article key={index}>
+            <div>
+              <Image
+                src={`https:${post.fields.image.fields.file.url}`}
+                alt="Blog Category Image"
+                width={100}
+                height={100}
+                className="object-cover rounded-xl"
+              />
+            </div>
+            <div>
+              <h2>{post.fields.title}</h2>
+              <p>{post.fields.preview}</p>
+            </div>
+          </article>
+        ))}
       </section>
     </>
   );

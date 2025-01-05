@@ -1,11 +1,11 @@
-import Categories from "@/app/categories/page";
 import * as contentful from "contentful";
-import { title } from "process";
 
 const client = contentful.createClient({
-  space: "obp236ywaup6",
-  environment: "master", // defaults to 'master' if not set
-  accessToken: "BVoN6Xnyr8WtIIKrsKjhVOIJtrRlDqgmMre0xDt1xAw",
+  space: process.env.CONTENTFUL_SPACE_ID || "obp236ywaup6",
+  environment: process.env.CONTENTFUL_ENVIRONMENT || "master", // defaults to 'master' if not set
+  accessToken:
+    process.env.CONTENTFUL_ACCESS_TOKEN ||
+    "BVoN6Xnyr8WtIIKrsKjhVOIJtrRlDqgmMre0xDt1xAw",
 });
 
 //Get both blog post and hero section entries
@@ -124,11 +124,7 @@ export async function getLatestPosts() {
       limit: 1,
     });
 
-    return res.items.map((post) => {
-      return {
-        blogCategory: post.fields.blogCategory,
-      };
-    });
+    return res;
   } catch (error) {
     console.error(error);
     return null;

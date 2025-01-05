@@ -1,5 +1,4 @@
 import { getAllCategories, getPostsByCategory } from "@/utils/contentful-data";
-import Image from "next/image";
 import Link from "next/link";
 
 export default async function CategoryPage() {
