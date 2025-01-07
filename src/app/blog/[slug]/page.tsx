@@ -1,4 +1,4 @@
-import { getSingleBlogPost } from "@/utils/contentful-data";
+import { getSingleBlogPost } from "@/utils/old";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import Image from "next/image";
 

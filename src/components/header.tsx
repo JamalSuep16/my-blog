@@ -1,73 +1,144 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Menu, Search, Trash } from "lucide-react";
 
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
-  const handleSearch = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log("Search term:", searchTerm);
-    // Handle the search logic here (e.g., API call, navigation, etc.)
+    if (searchTerm.trim() !== "") {
+      router.push(`/search?keyword=${searchTerm}`);
+      setSearchTerm(""); // Kosongkan input setelah pencarian
+    }
   };
+
+  const clearSearch = () => {
+    setSearchTerm("");
+  };
+
   return (
-    <header className="fixed justify-between top-0 left-0 w-full h-20 flex items-center z-40 bg-gradient-to-b from-zinc-900 to-zinc-900/0">
-      <img src="/logo.svg" alt="" />
+    <header className="fixed top-0 left-0 w-full h-20 flex items-center justify-between z-40 bg-gradient-to-b from-zinc-900 to-zinc-900/0 px-4 sm:px-8">
+      {/* Background Overlay ketika menu dibuka */}
+      <div
+        className={`${
+          isMenuOpen
+            ? "translate-x-0 opacity-50"
+            : "-translate-x-full opacity-0"
+        } fixed inset-0 z-10 sm:hidden transition-all duration-500`}
+        onClick={() => setIsMenuOpen(false)}
+      ></div>
+
       {/* Logo */}
-      <img src="/search.svg" alt="Logo" className="h-5" />
+      <Image src="/logo.svg" alt="Logo" width={50} height={50} />
 
-      {/* Search Bar */}
-      <form onSubmit={handleSearch} className="relative w-full max-w-md">
-        <input
-          type="text"
-          className="w-full px-4 py-2 text-sm text-gray-900 rounded-lg shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-slate-600 text-white px-3 py-1 rounded-md hover:bg-"
-        >
-          Search
-        </button>
-      </form>
-
-      <nav className="absolute top-full mt-2 right-0 min-w-40 p-2 bg-zinc-50/10 rounded-2xl ring-inset ring-1 ring-zinc-50/5 scale-90 isolate blur-sm opacity-0 invisible transition-[opacity,transform,filter] md:static md:flex md:items-center md:mt-0 md:opacity-100 md:blur-0 md:visible md:scale-100 backdrop-blur-2xl gap-5 justify-between">
+      {/* Navigasi Menu */}
+      <nav
+        className={`${
+          isMenuOpen
+            ? "translate-x-0 opacity-100"
+            : "-translate-x-full opacity-0"
+        } absolute top-full right-0 sm:static sm:flex sm:gap-8 sm:items-center sm:opacity-100 sm:translate-x-0 transition-all duration-500 bg-zinc-50/10 rounded-2xl ring-1 ring-zinc-50/5 p-4 sm:p-0`}
+      >
         <ul>
           <li>
-            <button className="hover:bg-gray-400 rounded-md">
-              <Link href="/">Home</Link>
-            </button>
+            <Link
+              href="/"
+              className="block hover:bg-gray-400 rounded-md p-2 sm:p-0"
+            >
+              Home
+            </Link>
           </li>
         </ul>
         <ul>
           <li>
-            <button className="hover:bg-gray-400 rounded-md">
-              <Link href="/blog">Blog</Link>
-            </button>
+            <Link
+              href="/blog"
+              className="block hover:bg-gray-400 rounded-md p-2 sm:p-0"
+            >
+              Blog
+            </Link>
           </li>
         </ul>
         <ul>
           <li>
-            <button className="hover:bg-gray-400 rounded-md">
-              <Link href="/categories">Categories</Link>
-            </button>
+            <Link
+              href="/categories"
+              className="block hover:bg-gray-400 rounded-md p-2 sm:p-0"
+            >
+              Categories
+            </Link>
           </li>
         </ul>
         <ul>
           <li>
-            <button className="hover:bg-gray-400 rounded-md">
-              <Link href="/about">About</Link>
-            </button>
+            <Link
+              href="/about"
+              className="block hover:bg-gray-400 rounded-md p-2 sm:p-0"
+            >
+              About
+            </Link>
           </li>
         </ul>
       </nav>
 
-      <button className="hover:bg-gray-400 rounded-md">
+      {/* Tombol "Contact Us" */}
+      <button className="hidden sm:block hover:bg-gray-400 rounded-md">
         <Link href="#contact">Contact Us</Link>
       </button>
+
+      {/* Form Pencarian dan Menu Hamburger */}
+      <div className="flex gap-5 items-center">
+        {/* Pencarian */}
+        <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+          <input
+            id="search"
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-72 rounded-full bg-secondary-grey px-4 py-2 text-sm font-light"
+          />
+          <button
+            type="submit"
+            className="grid h-10 w-10 place-items-center rounded-full bg-secondary-grey"
+          >
+            <Search size={18} color="grey" />
+          </button>
+          {searchTerm && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              className="grid h-10 w-10 place-items-center rounded-full bg-red-500 text-white"
+            >
+              <Trash size={18} />
+            </button>
+          )}
+        </form>
+
+        {/* Menu Hamburger */}
+        <button className="sm:hidden" onClick={() => setIsMenuOpen(true)}>
+          <Menu />
+        </button>
+      </div>
     </header>
   );
 }
