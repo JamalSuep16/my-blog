@@ -1,24 +1,44 @@
 "use client";
 
 import { getContentfulData } from "@/utils/contentful-data";
-
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+interface BlogPost {
+  title: string;
+  preview: string;
+  slug: string;
+  thumbnailImage: { fields: { file: { url: string } } };
+  blogCategory: { fields: { title: string } }[];
+}
+
+interface ContentfulPost {
+  items: { fields: BlogPost }[];
+}
+
+interface BlogCategory {
+  title: string;
+}
+
+interface ContentfulCategory {
+  items: { fields: BlogCategory }[];
+}
+
 export default function BlogPage() {
-  const [allPost, setAllPost] = useState<unknown>([]);
-  const [posts, setPosts] = useState<unknown>([]);
-  const [categories, setCategories] = useState<unknown>([]);
+  const [allPost, setAllPost] = useState<ContentfulPost | null>(null);
+  const [posts, setPosts] = useState<ContentfulPost | null>(null);
+  const [categories, setCategories] = useState<ContentfulCategory | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
       const posts = (await getContentfulData({
         contentType: "blogPost",
-      })) as unknown as contentfulpost;
+      })) as ContentfulPost;
       const categories = (await getContentfulData({
         contentType: "blogCategory",
-      })) as unknown as ContenfulCategory[];
+      })) as ContentfulCategory;
 
       setPosts(posts);
       setAllPost(posts);
@@ -28,43 +48,49 @@ export default function BlogPage() {
     fetchPosts();
   }, []);
 
-  function toggleCategory(cat: string) {
-    const filteredPost = allPost?.items?.filter((post) => {
-      return post.fields.blogCategory.some(
-        (category) => category.fields.title === cat
+  const toggleCategory = (cat: string | null) => {
+    setActiveCategory(cat);
+
+    if (cat === null) {
+      setPosts(allPost);
+    } else {
+      const filteredPost = allPost?.items.filter((post) =>
+        post.fields.blogCategory.some(
+          (category) => category.fields.title === cat
+        )
       );
-    });
-
-    setPosts(filteredPost);
-  }
-
-  console.log(posts);
+      setPosts({ items: filteredPost || [] });
+    }
+  };
 
   return (
-    <section className="grid grid-cols-[1fr_min-content]">
-      <div className="bg-slate-900">
-        <div className="grid grid-cols-2 gap-5 box-content text-white text-center mx-20">
-          {posts?.items?.map((item, index) => {
-            return (
-              <article
-                key={index}
-                className="relative mt-24 w-[300px] bg-zinc-500 hover:bg-zinc-400 rounded-xl"
-              >
-                <div className="relative w-[300px] h-[300px] ">
-                  <Image
-                    src={`https:${item.fields.thumbnailImage.fields.file.url}`}
-                    alt="ThumbnailImage"
-                    fill
-                    className=" object-cover rounded-xl"
-                  />
-                </div>
-                <h2 className="text-white font-bold">{item.fields.title}</h2>
-                <p>{item.fields.preview}</p>
-                <div>
+    <section className="flex flex-col md:flex-row gap-5 p-4 md:p-8">
+      {/* Konten Blog */}
+      <div className="flex-1 bg-slate-900 p-4 rounded-lg">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-white">
+          {posts?.items.map((item, index) => (
+            <article
+              key={index}
+              className="bg-zinc-800 hover:bg-zinc-700 rounded-lg overflow-hidden shadow-lg"
+            >
+              <div className="relative w-full h-48 md:h-64">
+                <Image
+                  src={`https:${item.fields.thumbnailImage.fields.file.url}`}
+                  alt="Thumbnail Image"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h2 className="text-lg font-bold">{item.fields.title}</h2>
+                <p className="text-sm mt-2 text-gray-300">
+                  {item.fields.preview}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-2">
                   {item.fields.blogCategory.map((category, index) => (
                     <span
                       key={index}
-                      className="relative rounded-md bg-slate-100 text-black"
+                      className="bg-slate-700 text-sm text-white px-2 py-1 rounded"
                     >
                       {category.fields.title}
                     </span>
@@ -72,32 +98,46 @@ export default function BlogPage() {
                 </div>
                 <Link
                   href={`/blog/${item.fields.slug}`}
-                  className="relative rounded-md bg-zinc-700 hover:bg-zinc-400"
+                  className="inline-block mt-4 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-500 transition"
                 >
                   Read More
                 </Link>
-              </article>
-            );
-          })}
+              </div>
+            </article>
+          ))}
         </div>
       </div>
-      <aside className="bg-slate-900">
-        <div className="sticky top-[120px]">
-          <h2 className="mb-5 font-medium text-primary-blue">
-            BROWSE BY CATEGORY
+
+      {/* Sidebar */}
+      <aside className="w-full md:w-1/4 bg-slate-800 p-4 rounded-lg">
+        <div className="sticky top-20">
+          <h2 className="text-white mb-4 text-lg font-semibold">
+            Browse by Category
           </h2>
-          <div className="flex flex-wrap gap-2 text-sm">
-            <button onClick={() => toggleCategory(category.title)}>All</button>
-            {categories?.items?.map(
-              (category: { title: string }, index: number) => (
-                <button
-                  key={index}
-                  onClick={() => toggleCategory(category.fields.title)}
-                >
-                  {category.fields.title}
-                </button>
-              )
-            )}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => toggleCategory(null)}
+              className={`${
+                activeCategory === null
+                  ? "bg-blue-600"
+                  : "bg-gray-700 hover:bg-gray-600"
+              } text-white px-3 py-1 rounded transition`}
+            >
+              All
+            </button>
+            {categories?.items.map((category, index) => (
+              <button
+                key={index}
+                onClick={() => toggleCategory(category.fields.title)}
+                className={`${
+                  activeCategory === category.fields.title
+                    ? "bg-blue-600"
+                    : "bg-gray-700 hover:bg-gray-600"
+                } text-white px-3 py-1 rounded transition`}
+              >
+                {category.fields.title}
+              </button>
+            ))}
           </div>
         </div>
       </aside>

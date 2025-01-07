@@ -19,22 +19,44 @@ export default async function blogCategories1({
       }
     ];
   };
-  console.log(post);
+
   return (
-    <>
-      <section className="">
-        <div className="relative w-full h-[300px] mt-24">
-          <Image
-            src={`https:${post?.items[0].fields.thumbnailImage.fields.file.url}`}
-            alt="Latest post image"
-            fill
-          />
+    <section className="mt-24">
+      {/* Header dengan Thumbnail */}
+      <div className="relative w-full h-[300px] md:h-[500px]">
+        <Image
+          src={`https:${post?.items[0].fields.thumbnailImage.fields.file.url}`}
+          alt="Thumbnail for blog post"
+          fill
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <h1 className="text-3xl md:text-5xl font-bold text-white text-center">
+            {post?.items[0].fields.title}
+          </h1>
         </div>
-        <div className="mt-10 ml-10 mr-64 font-bold">
-          <h2 className="text-5xl">{post?.items[0].fields.title}</h2>
-          {documentToReactComponents(post?.items[0].fields.content)}
-        </div>
-      </section>
-    </>
+      </div>
+
+      {/* Konten Blog */}
+      <div className="p-4 md:p-8 lg:p-16 bg-white">
+        <article className="text-black max-w-4xl mx-auto">
+          {documentToReactComponents(post?.items[0].fields.content, {
+            renderNode: {
+              "embedded-asset-block": (node: any) => (
+                <div className="my-8">
+                  <Image
+                    src={`https:${node.data.target.fields.file.url}`}
+                    alt={node.data.target.fields.title}
+                    width={800}
+                    height={400}
+                    className="rounded-lg"
+                  />
+                </div>
+              ),
+            },
+          })}
+        </article>
+      </div>
+    </section>
   );
 }
