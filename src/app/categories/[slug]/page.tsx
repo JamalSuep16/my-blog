@@ -8,9 +8,21 @@ export default async function CategoriesSlugPage({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const posts = await getContentfulData({
+  const posts = (await getContentfulData({
     contentType: "blogPost",
-  });
+  })) as unknown as {
+    items: [
+      {
+        fields: {
+          title: string;
+          preview: string;
+          slug: string;
+          thumbnailImage: { fields: { file: { url: string } } };
+          blogCategory: [{ fields: { slug: string } }];
+        };
+      }
+    ];
+  };
   const filteredPosts = posts?.items.filter((posts) => {
     return posts?.fields?.blogCategory.some(
       (category) => category.fields.slug === slug
@@ -20,9 +32,9 @@ export default async function CategoriesSlugPage({
   console.log(filteredPosts);
 
   return (
-    <section className="py-8 px-4 sm:px-8">
-      <h1 className="text-3xl font-semibold text-center mb-6">
-        Posts in "{slug}" Category
+    <section className="bg-white py-20 px-4 sm:px-8">
+      <h1 className="text-3xl text-black font-semibold text-center mb-6">
+        Posts in {slug} Category
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

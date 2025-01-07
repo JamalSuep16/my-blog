@@ -1,105 +1,74 @@
 // "use client";
-
-// import { useSearchParams } from "next/navigation";
-// import { useState, useEffect, Suspense } from "react";
+// import { Post, searchPostByTitle } from "@/utils/contentful-data";
 // import Image from "next/image";
 // import Link from "next/link";
-
-// import { getContentfulData } from "@/types/contentful";
-// import { getEntries } from "@/utils/get-contentful-data";
+// import { useSearchParams } from "next/navigation";
+// import { useEffect, useState } from "react";
 
 // export default function SearchPage() {
-//   return (
-//     <Suspense fallback="<p>Loading...</p>">
-//       <SearchComponent />
-//     </Suspense>
-//   );
-// }
-
-// function SearchComponent() {
-//   const [results, setResults] = useState<getContentfulData[] | null>([]);
-//   const [isLoading, setIsLoading] = useState(true);
 //   const searchParams = useSearchParams();
-//   const keyword = searchParams.get("keyword");
+//   const query = searchParams.get("q");
+//   const [results, setResults] = useState<Post[]>([]);
+//   const [loading, setLoading] = useState(true);
 
 //   useEffect(() => {
-//     setIsLoading(true);
-
-//     async function getResults(keyword: string) {
-//       if (!keyword) {
-//         setResults([]);
-//       } else {
-//         const result = await getEntries<ContentfulPost>({
-//           keyword,
-//           content_type: "bumpBlogPost",
-//         });
-//         setResults(result);
+//     const fetchResults = async () => {
+//       if (query) {
+//         const posts = (await searchPostByTitle(query)) as unknown as Post[];
+//         setResults(posts || []);
 //       }
+//       setLoading(false);
+//     };
 
-//       setIsLoading(false);
-//     }
+//     fetchResults();
+//   }, [query]);
 
-//     getResults(keyword!);
-//   }, [keyword]);
+//   console.log(results);
+
+//   if (loading) {
+//     return <div>Loading...</div>;
+//   }
 
 //   return (
-//     <section className="mx-auto mt-[100px] min-h-[calc(100vh-185px)] max-w-[1100px] p-5">
-//       <h2 className="font-lighter mb-10 text-2xl sm:text-4xl">
-//         Search Results For:{" "}
-//         <span className="font-bold">{keyword?.toUpperCase()}</span>
-//       </h2>
-//       {isLoading ? (
-//         <p>Loading...</p>
-//       ) : results && results.length > 0 ? (
-//         <div className="grid grid-cols-1 gap-14 md:grid-cols-2">
-//           {results.map((post) => (
-//             <article
-//               key={post.slug}
-//               className="grid grid-cols-1 grid-rows-[300px_1fr] gap-7 sm:h-full sm:grid-cols-[1fr_250px] sm:grid-rows-1"
+//     <section className="">
+//       {results.map((post) => (
+//         <article
+//           key={post.fields.slug as string}
+//           className="bg-white px-5 md:px-10 py-10 grid grid-cols-1 md:flex gap-10"
+//         >
+//           <div className="relative w-full md:w-[800px] h-[250px] md:h-[450px]">
+//             <Image
+//               src={`https:${post.fields.blogImage.fields.file.url}`}
+//               alt="bike image"
+//               fill
+//               className="object-cover rounded-lg"
+//             />
+//           </div>
+
+//           <div>
+//             <h2 className="font-extrabold text-[25px]">{post.fields.title}</h2>
+//             <p className="font-medium my-2 pb-1 text-sm md:text-base">
+//               {post.fields.description}
+//             </p>
+//             <span className="font-medium bg-gray-300 p-2 px-4 rounded-full">
+//               {post.fields.categories.fields.name}
+//             </span>
+
+//             <Link
+//               className="flex hover:bg-gray-300 rounded-[4px] w-fit text-black p-2 gap-8 font-bold mt-5"
+//               href={`/blog/${post.fields.slug}`}
 //             >
-//               <Link href={`/blog/${post.slug}`} className="flex gap-2">
-//                 <div className="relative hidden h-full w-12 overflow-hidden rounded-3xl lg:block">
-//                   <Image
-//                     src={`https:${post.image.fields.file.url}`}
-//                     alt="Featured image"
-//                     fill
-//                     className="bg-black object-cover object-left"
-//                   />
-//                 </div>
-//                 <div className="relative h-full w-full overflow-hidden rounded-3xl">
-//                   <Image
-//                     src={`https:${post.image.fields.file.url}`}
-//                     alt="Featured image"
-//                     fill
-//                     className="bg-black object-cover lg:object-[-2.5rem_0]"
-//                   />
-//                 </div>
-//               </Link>
-//               <div>
-//                 <Link
-//                   href={`/blog/${post.slug}`}
-//                   className="mb-4 block text-2xl font-bold"
-//                 >
-//                   {post.title}
-//                 </Link>
-//                 <p className="mb-3">{post.excerpt}</p>
-//                 <div className="flex flex-wrap gap-2">
-//                   {post.categories.map((category, index) => (
-//                     <span
-//                       key={index}
-//                       className="rounded-full bg-secondary-grey px-4 py-2 text-sm"
-//                     >
-//                       {category.fields.name}
-//                     </span>
-//                   ))}
-//                 </div>
-//               </div>
-//             </article>
-//           ))}
-//         </div>
-//       ) : (
-//         <p>No results were found</p>
-//       )}
+//               Detail Motor
+//               <Image
+//                 src="/arrow-right.svg"
+//                 height={15}
+//                 width={15}
+//                 alt="arrow logo"
+//               />
+//             </Link>
+//           </div>
+//         </article>
+//       ))}
 //     </section>
 //   );
 // }

@@ -20,10 +20,20 @@ export default async function HomePage() {
     ];
   };
 
-  const postByCategory = await getContentfulData({
+  const postByCategory = (await getContentfulData({
     contentType: "blogCategory",
     fieldsPopular: true,
-  });
+  })) as unknown as {
+    items: [
+      {
+        fields: {
+          title: string;
+          preview: string;
+          image: { fields: { file: { url: string } } };
+        };
+      }
+    ];
+  };
 
   return (
     <>
@@ -45,7 +55,7 @@ export default async function HomePage() {
               HI, Welcome👋
             </h1>
             <p className="mt-4">
-              What I'm learning about shipping great products, <br />
+              What Im learning about shipping great products, <br />
               becoming a better developer, and growing a career in tech.
             </p>
           </div>

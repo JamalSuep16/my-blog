@@ -8,8 +8,18 @@ export default async function blogCategories1({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  const post = await getSingleBlogPost(slug);
-  console.log(post?.items[0].fields.title);
+  const post = (await getSingleBlogPost(slug)) as unknown as {
+    items: [
+      {
+        fields: {
+          title: string;
+          content: any;
+          thumbnailImage: { fields: { file: { url: string } } };
+        };
+      }
+    ];
+  };
+  console.log(post);
   return (
     <>
       <section className="">

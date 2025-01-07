@@ -1,6 +1,5 @@
 "use client";
 
-import { ContenfulCategory, contentfulpost } from "@/types/contentful";
 import { getContentfulData } from "@/utils/contentful-data";
 
 import Image from "next/image";

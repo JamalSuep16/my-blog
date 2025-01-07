@@ -2,8 +2,19 @@ import { getContentfulData } from "@/utils/contentful-data";
 import Link from "next/link";
 
 export default async function CategoryPage() {
-  const posts = await getContentfulData({ contentType: "blogCategory" });
-  console.log(posts);
+  const posts = (await getContentfulData({
+    contentType: "blogCategory",
+  })) as unknown as {
+    items: [
+      {
+        fields: {
+          title: string;
+          description: string;
+          slug: string;
+        };
+      }
+    ];
+  };
 
   return (
     <>

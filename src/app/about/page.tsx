@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function About() {
   return (
     <section className="bg-slate-900 py-12 px-6 md:py-24 md:px-20">
@@ -6,7 +8,7 @@ export default function About() {
           ABOUT ME
         </h2>
         <div className="mt-12 flex flex-col md:flex-row items-center md:items-start gap-8 justify-between">
-          <img
+          <Image
             className="w-full md:w-2/6 rounded-lg shadow-md shadow-slate-50"
             src="https://images.unsplash.com/photo-1484417894907-623942c8ee29?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt=""
@@ -24,10 +26,10 @@ export default function About() {
               seamless and engaging digital experiences. <br /> <br /> My
               expertise includes technologies like React, Node.js, MongoDB, and
               Tailwind CSS. I thrive on solving complex problems and
-              collaborating with teams to bring ideas to life. When I'm not
-              coding, you'll find me exploring new tech trends or enjoying
-              outdoor adventures. <br /> <br /> I'm always eager to take on
-              challenging projects that push the boundaries of innovation. Let's
+              collaborating with teams to bring ideas to life. When Im not
+              coding, youll find me exploring new tech trends or enjoying
+              outdoor adventures. <br /> <br /> Im always eager to take on
+              challenging projects that push the boundaries of innovation. Lets
               create something amazing together!
             </span>
             <ul className="mt-4 list-disc pl-6 text-sm md:text-base font-normal text-white">
@@ -40,8 +42,8 @@ export default function About() {
             </ul>
             <br />
             <p>
-              One last thing, I'm available for freelance work, so feel free to
-              reach out and say hello! I promise I don't bite 😉
+              One last thing, Im available for freelance work, so feel free to
+              reach out and say hello! I promise I dont bite 😉
             </p>
           </div>
         </div>
@@ -57,7 +59,7 @@ export default function About() {
         <div className="mt-10">
           <div className="max-w-7xl mx-auto flex flex-col items-center">
             <p>
-              What’s next? Feel free to reach out to me if you're looking for a
+              What’s next? Feel free to reach out to me if youre looking for a
               developer, have a query, or simply want to connect.
             </p>
             <h2 className=" text-white text-2xl font-bold mt-5">
