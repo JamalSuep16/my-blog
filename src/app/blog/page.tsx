@@ -35,10 +35,10 @@ export default function BlogPage() {
     const fetchPosts = async () => {
       const posts = (await getContentfulData({
         contentType: "blogPost",
-      })) as ContentfulPost;
+      })) as unknown as ContentfulPost;
       const categories = (await getContentfulData({
         contentType: "blogCategory",
-      })) as ContentfulCategory;
+      })) as unknown as ContentfulCategory;
 
       setPosts(posts);
       setAllPost(posts);

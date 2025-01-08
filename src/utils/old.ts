@@ -8,48 +8,48 @@ const client = contentful.createClient({
     "BVoN6Xnyr8WtIIKrsKjhVOIJtrRlDqgmMre0xDt1xAw",
 });
 
-//Get both blog post and hero section entries
-export async function getAllEntries() {
-  try {
-    const data = await client.getEntries({});
-    return data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+// //Get both blog post and hero section entries
+// export async function getAllEntries() {
+//   try {
+//     const data = await client.getEntries({});
+//     return data;
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
 
-export async function getAllBlogPost() {
-  try {
-    const data = await client.getEntries({
-      content_type: "blogPost",
-      content_type: "blogcategory",
-    });
+// export async function getAllBlogPost() {
+//   try {
+//     const data = await client.getEntries({
+//       content_type: "blogPost",
+//       content_type: "blogcategory",
+//     });
 
-    return data.items.map((post) => {
-      let thumbnailUrl = post?.fields?.thumbnailImage?.fields?.file.url;
+//     return data.items.map((post) => {
+//       let thumbnailUrl = post?.fields?.thumbnailImage?.fields?.file.url;
 
-      if (!thumbnailUrl) {
-        thumbnailUrl = "//id.pinterest.com/pin/118430665233596343/";
-      }
+//       if (!thumbnailUrl) {
+//         thumbnailUrl = "//id.pinterest.com/pin/118430665233596343/";
+//       }
 
-      return {
-        title: post.fields.title,
-        slug: post.fields.slug,
-        content: post.fields.content,
-        thumbnailImage: `https:${thumbnailUrl}`,
-        categories: post.fields.categories,
-        preview: post.fields.preview,
-        blogcategory: post.fields.blogcategory,
-      };
-    });
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+//       return {
+//         title: post.fields.title,
+//         slug: post.fields.slug,
+//         content: post.fields.content,
+//         thumbnailImage: `https:${thumbnailUrl}`,
+//         categories: post.fields.categories,
+//         preview: post.fields.preview,
+//         blogcategory: post.fields.blogcategory,
+//       };
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
 
-export async function getAllHeroSection() {}
+// export async function getAllHeroSection() {}
 
 export async function getSingleBlogPost(slug: string) {
   try {
@@ -64,71 +64,71 @@ export async function getSingleBlogPost(slug: string) {
   }
 }
 
-export async function getPostsByTitle(keywoard: string) {
-  try {
-    const res = await client.getEntries({
-      content_type: "blogPost",
-      "fields.title[match]": keywoard,
-    });
-    return res;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+// export async function getPostsByTitle(keywoard: string) {
+//   try {
+//     const res = await client.getEntries({
+//       content_type: "blogPost",
+//       "fields.title[match]": keywoard,
+//     });
+//     return res;
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
 
-export async function getPostsByCategory({
-  content_type,
-  fields_popular,
-}: {
-  content_type: string;
-  fields_popular?: boolean;
-}) {
-  try {
-    const res = await client.getEntries({
-      content_type: content_type,
-      "fields.popular": fields_popular,
-    });
-    console.log(res.items);
-    return res;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+// export async function getPostsByCategory({
+//   content_type,
+//   fields_popular,
+// }: {
+//   content_type: string;
+//   fields_popular?: boolean;
+// }) {
+//   try {
+//     const res = await client.getEntries({
+//       content_type: content_type,
+//       "fields.popular": fields_popular,
+//     });
+//     console.log(res.items);
+//     return res;
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
 
-export async function getAllCategories() {
-  try {
-    const data = await client.getEntries({ content_type: "blogCategory" });
+// export async function getAllCategories() {
+//   try {
+//     const data = await client.getEntries({ content_type: "blogCategory" });
 
-    console.log(data.items);
+//     console.log(data.items);
 
-    return data.items.map((post) => {
-      return {
-        title: post.fields.title,
-        description: post.fields.description,
-      };
-    });
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+//     return data.items.map((post) => {
+//       return {
+//         title: post.fields.title,
+//         description: post.fields.description,
+//       };
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }
 
-// client.getEntries()
-// .then((response) => console.log(response.items))
-// .catch(console.error)
+// // client.getEntries()
+// // .then((response) => console.log(response.items))
+// // .catch(console.error)
 
-export async function getLatestPosts() {
-  try {
-    const res = await client.getEntries({
-      content_type: "blogPost",
-      limit: 1,
-    });
+// export async function getLatestPosts() {
+//   try {
+//     const res = await client.getEntries({
+//       content_type: "blogPost",
+//       limit: 1,
+//     });
 
-    return res;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
+//     return res;
+//   } catch (error) {
+//     console.error(error);
+//     return null;
+//   }
+// }

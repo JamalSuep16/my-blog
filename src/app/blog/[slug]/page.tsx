@@ -1,5 +1,6 @@
 import { getSingleBlogPost } from "@/utils/old";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { Document } from "@contentful/rich-text-types";
 import Image from "next/image";
 
 export default async function blogCategories1({
@@ -13,7 +14,7 @@ export default async function blogCategories1({
       {
         fields: {
           title: string;
-          content: any;
+          content: Document;
           thumbnailImage: { fields: { file: { url: string } } };
         };
       }
@@ -42,7 +43,7 @@ export default async function blogCategories1({
         <article className="text-black max-w-4xl mx-auto">
           {documentToReactComponents(post?.items[0].fields.content, {
             renderNode: {
-              "embedded-asset-block": (node: any) => (
+              "embedded-asset-block": (node) => (
                 <div className="my-8">
                   <Image
                     src={`https:${node.data.target.fields.file.url}`}

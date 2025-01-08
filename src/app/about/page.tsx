@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function About() {
   return (
     <section className="bg-slate-900 py-12 px-6 md:py-24 md:px-20">
@@ -6,10 +8,12 @@ export default function About() {
           ABOUT ME
         </h2>
         <div className="mt-12 flex flex-col md:flex-row items-center md:items-start gap-8 justify-between">
-          <img
+          <Image
             className="w-full md:w-2/6 rounded-lg shadow-md shadow-slate-50"
             src="https://images.unsplash.com/photo-1484417894907-623942c8ee29?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt=""
+            width={100}
+            height={100}
           />
           <div className="w-full md:w-3/6">
             <h2 className="text-2xl md:text-3xl font-normal text-white">
@@ -67,8 +71,13 @@ export default function About() {
               +62 89512376842
             </h2>
             <p>You may also find me on these platforms!</p>
-            <img src="/linkedin-logo.svg" alt="" className="mt-5 size-10" />
-            <img src="/" alt="" />
+            <Image
+              src="/linkedin-logo.svg"
+              alt=""
+              width={100}
+              height={100}
+              className="mt-5 size-10"
+            />
           </div>
         </div>
       </div>

@@ -23,7 +23,7 @@ export default function Header() {
     };
   }, [isMenuOpen]);
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchTerm.trim() !== "") {
       router.push(`/search?keyword=${searchTerm}`);

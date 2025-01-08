@@ -72,3 +72,9 @@
 //     </section>
 //   );
 // }
+
+export default function SearchPage() {
+  <section>
+    <h1>search</h1>
+  </section>;
+}
